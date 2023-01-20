@@ -1,9 +1,27 @@
 import { myDate } from './dateFormat.js';
 import { renderBlock } from './lib.js';
+import { SearchFormData } from './types.js';
+
+function formHandle(event: Event) {
+  event.preventDefault();
+  const city: HTMLInputElement = document.querySelector('#city');
+  const checkInDate: HTMLInputElement = document.querySelector('#check-in-date');
+  const checkOutDate: HTMLInputElement = document.querySelector('#check-out-date');
+  const maxPrice: HTMLInputElement = document.querySelector('#max-price');
+  const searchData = {
+    city: city.value,
+    checkInDate: checkInDate.value,
+    checkOutDate: checkOutDate.value,
+    maxPrice: Number(maxPrice.value)
+  };
+  searchVariants(searchData);
+}
+
+function searchVariants(data: SearchFormData) {
+  console.log(data);
+}
 
 export function renderSearchFormBlock(
-  checkInDate: string = myDate.addDays(1),
-  checkOutDate: string = myDate.addDays(3)
 ) {
   renderBlock(
     'search-form-block',
@@ -24,11 +42,11 @@ export function renderSearchFormBlock(
         <div class="row">
           <div>
             <label for="check-in-date">Дата заезда</label>
-            <input id="check-in-date" type="date" value="${checkInDate}" min="${myDate.addDays()}" max="${myDate.getMaxDate()}" name="checkin" />
+            <input id="check-in-date" type="date" value="${myDate.addDays(1)}" min="${myDate.addDays()}" max="${myDate.getMaxDate()}" name="checkin" />
           </div>
           <div>
             <label for="check-out-date">Дата выезда</label>
-            <input id="check-out-date" type="date" value="${checkOutDate}" min="${myDate.addDays(1)}" max="${myDate.getMaxDate()}" name="checkout" />
+            <input id="check-out-date" type="date" value="${myDate.addDays(3)}" min="${myDate.addDays(1)}" max="${myDate.getMaxDate()}" name="checkout" />
           </div>
           <div>
             <label for="max-price">Макс. цена суток</label>
@@ -42,4 +60,6 @@ export function renderSearchFormBlock(
     </form>
     `
   );
+  const searchForm = document.querySelector('form');
+  searchForm.addEventListener('submit', formHandle);
 }

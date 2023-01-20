@@ -1,10 +1,12 @@
 import { renderSearchFormBlock } from './search-form.js';
 import { renderSearchStubBlock } from './search-results.js';
-import { renderUserBlock } from './user.js';
+import { getFavoritesAmount, getUserData, renderUserBlock } from './user.js';
 import { renderToast } from './lib.js';
 
+const user = getUserData();
+
 window.addEventListener('DOMContentLoaded', () => {
-  renderUserBlock('Vitaliy Zems', './img/avatar.png', 3);
+  renderUserBlock(user.userName, user.avatarUrl, getFavoritesAmount());
   renderSearchFormBlock();
   renderSearchStubBlock();
   renderToast(
