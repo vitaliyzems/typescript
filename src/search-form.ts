@@ -1,28 +1,30 @@
 import { myDate } from './dateFormat.js';
 import { renderBlock } from './lib.js';
-import { SearchFormData } from './types.js';
+import { Hotel, SearchFormData } from './types.js';
+import { search } from './fetch.js';
+import { renderSearchResultsBlock } from './search-results.js';
+import { toggleFavoriteItem } from './favorite.js';
+
+const checkInDate = new Date();
+const checkOutDate = new Date();
+checkOutDate.setDate(checkInDate.getDate() + 2);
 
 function formHandle(event: Event) {
   event.preventDefault();
-  const city: HTMLInputElement = document.querySelector('#city');
   const checkInDate: HTMLInputElement = document.querySelector('#check-in-date');
   const checkOutDate: HTMLInputElement = document.querySelector('#check-out-date');
   const maxPrice: HTMLInputElement = document.querySelector('#max-price');
   const searchData = {
-    city: city.value,
     checkInDate: checkInDate.value,
     checkOutDate: checkOutDate.value,
     maxPrice: Number(maxPrice.value)
   };
-  searchVariants(searchData);
+
+  search(searchData)
+    .then((results: Hotel[]) => renderSearchResultsBlock(results));
 }
 
-function searchVariants(data: SearchFormData) {
-  console.log(data);
-}
-
-export function renderSearchFormBlock(
-) {
+export function renderSearchFormBlock() {
   renderBlock(
     'search-form-block',
     `
@@ -63,3 +65,4 @@ export function renderSearchFormBlock(
   const searchForm = document.querySelector('form');
   searchForm.addEventListener('submit', formHandle);
 }
+

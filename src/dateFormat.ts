@@ -18,4 +18,4 @@ export const myDate = {
     const maxDate = new Date(year, month + 2, 0);
     return formatDate(year, month + 2, maxDate.getDate());
   }
-}
+};

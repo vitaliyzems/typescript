@@ -1,7 +1,11 @@
 import { renderBlock } from './lib.js';
-import { User } from './types.js';
+import { FavoriteItems, User } from './types.js';
 
-export function renderUserBlock(userName: string, avatarLink: string, favoriteItemsAmount?: number) {
+export function writeUser(user: User): void {
+  localStorage.user = JSON.stringify(user);
+}
+
+export function renderUserBlock(userName: string, avatarLink: string, favoriteItemsAmount: number) {
   const favoritesCaption = favoriteItemsAmount
     ? favoriteItemsAmount
     : 'ничего нет';
@@ -25,8 +29,4 @@ export function renderUserBlock(userName: string, avatarLink: string, favoriteIt
 
 export function getUserData(): User {
   return JSON.parse(localStorage.user);
-}
-
-export function getFavoritesAmount(): number {
-  return Number(localStorage.favoritesAmount);
 }
