@@ -1,17 +1,14 @@
-import { SearchFormData } from './types.js';
+import { SearchFormData, Hotel } from './types.js';
 
-function dateToUnixStamp(date: Date) {
+function dateToUnixStamp(date: Date): number {
   return date.getTime() / 1000;
 }
 
-function responseToJson(requestPromise: Promise<any>) {
-  return requestPromise
-    .then((response: { text: () => any; }) => {
-      return response.text();
-    })
-    .then((response: string) => {
-      return JSON.parse(response);
-    });
+async function responseToJson(requestPromise: Promise<Response>): Promise<Hotel[]> {
+  const response: Response = await requestPromise;
+  const json: string = await response.text();
+  const hotels: Hotel[] = JSON.parse(json);
+  return hotels;
 }
 
 export function search(data: SearchFormData) {

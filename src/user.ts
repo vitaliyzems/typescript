@@ -1,16 +1,12 @@
 import { renderBlock } from './lib.js';
-import { FavoriteItems, User } from './types.js';
+import { User } from './types.js';
+import { renderFavoritesBlock } from './favorite.js';
 
 export function writeUser(user: User): void {
   localStorage.user = JSON.stringify(user);
 }
 
-export function renderUserBlock(userName: string, avatarLink: string, favoriteItemsAmount: number) {
-  const favoritesCaption = favoriteItemsAmount
-    ? favoriteItemsAmount
-    : 'ничего нет';
-  const hasFavoriteItems = favoriteItemsAmount ? true : false;
-
+export function renderUserBlock(userName: string, avatarLink: string, favoriteItemsAmount: number): void {
   renderBlock(
     'user-block',
     `
@@ -19,7 +15,7 @@ export function renderUserBlock(userName: string, avatarLink: string, favoriteIt
       <div class="info">
           <p class="name">${userName}</p>
           <p class="fav">
-            <i class="heart-icon${hasFavoriteItems ? ' active' : ''}"></i>${favoritesCaption}
+            ${renderFavoritesBlock(favoriteItemsAmount)}
           </p>
       </div>
     </div>

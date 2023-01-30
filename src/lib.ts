@@ -1,9 +1,11 @@
-export function renderBlock(elementId, html) {
-  const element = document.getElementById(elementId);
+import { ToastAction, ToastMessage } from './types.js';
+
+export function renderBlock(elementId: string, html: string): void {
+  const element: HTMLElement = document.getElementById(elementId);
   element.innerHTML = html;
 }
 
-export function renderToast(message, action) {
+export function renderToast(message: ToastMessage, action?: ToastAction): void {
   let messageText = '';
 
   if (message != null) {

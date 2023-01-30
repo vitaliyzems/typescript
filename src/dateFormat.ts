@@ -1,21 +1,33 @@
-function formatDate(year: number, month: number, day: number): string {
-  return `${year}-${month.toString().length === 1 ? `0${month}` : month}-${day}`;
-}
+export class Dates {
+  getMinDate(): string {
+    const date = new Date;
 
-export const myDate = {
-  addDays(addedDays = 0): string {
+    return this._formatDate(date);
+  }
+
+  getMaxDate(): string {
     const date = new Date();
-    date.setDate(date.getDate() + addedDays);
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return formatDate(year, month, day);
-  },
-  getMaxDate() {
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const maxDate = new Date(year, month + 2, 0);
-    return formatDate(year, month + 2, maxDate.getDate());
+    const maxDate = new Date(year, month + 1, 0);
+
+    return this._formatDate(maxDate);
   }
-};
+
+  addDays(addedDays: number): string {
+    const date = new Date();
+    date.setDate(date.getDate() + addedDays);
+
+    return this._formatDate(date);
+  }
+
+  private _formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const monthString = (date.getMonth() + 1).toString();
+    const month = monthString.length === 1 ? `0${monthString}` : monthString;
+    const dayString = date.getDate().toString();
+    const day = dayString.length === 1 ? `0${dayString}` : dayString;
+
+    return `${year}-${month}-${day}`;
+  }
+}

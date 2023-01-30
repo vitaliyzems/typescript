@@ -1,8 +1,8 @@
 import { renderBlock } from './lib.js';
-import { Hotel } from './types.js';
+import { FavoriteItems, Hotel } from './types.js';
 import { toggleFavoriteItem } from './favorite.js';
 
-export function renderSearchStubBlock() {
+export function renderSearchStubBlock(): void {
   renderBlock(
     'search-results-block',
     `
@@ -14,7 +14,7 @@ export function renderSearchStubBlock() {
   );
 }
 
-export function renderEmptyOrErrorSearchBlock(reasonMessage) {
+export function renderEmptyOrErrorSearchBlock(reasonMessage: string): void {
   renderBlock(
     'search-results-block',
     `
@@ -26,7 +26,7 @@ export function renderEmptyOrErrorSearchBlock(reasonMessage) {
   );
 }
 
-export function renderSearchResultsBlock(variants: Hotel[]) {
+export function renderSearchResultsBlock(variants: Hotel[]): void {
   renderBlock(
     'search-results-block',
     `
@@ -41,32 +41,32 @@ export function renderSearchResultsBlock(variants: Hotel[]) {
             </select>
         </div>
     </div>
-    <ul class="results-list">
-    ${variants.map(hotel => renderSearchResult(hotel))}
+    <ul id="results-list" class="results-list">
+      ${variants.map(hotel => getSearchResult(hotel))}
     </ul>
     `
   );
 
-  const searchResultBlock = document.getElementById('search-results-block');
+  const searchResultBlock: HTMLElement = document.getElementById('search-results-block');
 
-  searchResultBlock.addEventListener('click', (event) => {
-    const target: HTMLElement = event.target;
-    if (!target.classList.contains('favorites')) {
+  searchResultBlock.addEventListener('click', ({ target }) => {
+    const element = target as HTMLElement;
+    if (!element.classList.contains('favorites')) {
       return;
     }
-    const { id, name, image } = target.dataset;
-    const item = { id: Number(id), name, image };
+    const { id, name, image } = element.dataset;
+    const item = { id, name, image };
     toggleFavoriteItem(item);
   });
 }
 
-function renderSearchResult(hotel: Hotel) {
+function getSearchResult(hotel: Hotel): string {
   const { id, name, image, price, remoteness, description } = hotel;
   return `
     <li class="result">
       <div class="result-container">
         <div class="result-img-container">
-          <div class="favorites" data-id="${id}" data-name="${name}" data-image="${image}"></div>
+          <div class="favorites ${isActive(id)}" data-id="${id}" data-name="${name}" data-image="${image}"></div>
           <img class="result-img" src="${image}" alt="">
         </div>	
         <div class="result-info">
@@ -85,4 +85,14 @@ function renderSearchResult(hotel: Hotel) {
       </div>
     </li>
   `;
+}
+
+function isActive(id: string): string {
+  const favoriteItems: FavoriteItems = JSON.parse(localStorage.getItem('favoriteItems'));
+
+  if (favoriteItems == null) return '';
+
+  if (favoriteItems[id] == null) return '';
+
+  return 'active';
 }
