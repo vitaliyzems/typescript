@@ -27,6 +27,10 @@ export function renderEmptyOrErrorSearchBlock(reasonMessage: string): void {
 }
 
 export function renderSearchResultsBlock(variants: Hotel[]): void {
+  const hotelsHTML = variants.map(hotel => {
+    return getSearchResult(hotel);
+  });
+
   renderBlock(
     'search-results-block',
     `
@@ -42,15 +46,15 @@ export function renderSearchResultsBlock(variants: Hotel[]): void {
         </div>
     </div>
     <ul id="results-list" class="results-list">
-      ${variants.map(hotel => getSearchResult(hotel))}
+      ${hotelsHTML.join('')}
     </ul>
     `
   );
 
   const searchResultBlock: HTMLElement = document.getElementById('search-results-block');
 
-  searchResultBlock.addEventListener('click', ({ target }) => {
-    const element = target as HTMLElement;
+  searchResultBlock.addEventListener('click', (event: MouseEvent) => {
+    const element = event.target as HTMLElement;
     if (!element.classList.contains('favorites')) {
       return;
     }
