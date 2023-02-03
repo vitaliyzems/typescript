@@ -41,7 +41,7 @@ export interface HotelSdk {
 export type FavoriteHotel = Pick<Hotel, 'id' | 'name' | 'image'>;
 
 export interface FavoriteItems {
-  [key: number]: FavoriteHotel;
+  [key: string]: FavoriteHotel;
 }
 
 export type FavoritesCaption = number | string;

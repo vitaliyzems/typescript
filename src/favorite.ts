@@ -1,10 +1,14 @@
 import { FavoriteHotel, FavoriteItems, FavoritesCaption } from './types.js';
 
 export function toggleFavoriteItem(item: FavoriteHotel) {
-  const icon: HTMLElement = document.querySelector(`[data-id="${item.id}"]`);
-  const fav: HTMLElement = document.querySelector('.fav');
+  const icon: HTMLElement | null = document.querySelector(`[data-id="${item.id}"]`);
+  const fav: HTMLElement | null = document.querySelector('.fav');
 
-  const favoriteItems: FavoriteItems = JSON.parse(localStorage.getItem('favoriteItems'));
+  if (icon == null || fav == null) {
+    return;
+  }
+
+  const favoriteItems: FavoriteItems = JSON.parse(localStorage.getItem('favoriteItems') ?? '{}');
 
   if (favoriteItems == null) {
     localStorage.favoriteItems = JSON.stringify({ [item.id]: item });

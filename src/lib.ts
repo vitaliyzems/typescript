@@ -1,11 +1,14 @@
 import { ToastAction, ToastMessage } from './types.js';
 
 export function renderBlock(elementId: string, html: string): void {
-  const element: HTMLElement = document.getElementById(elementId);
+  const element: HTMLElement | null = document.getElementById(elementId);
+  if (element == null) {
+    return;
+  }
   element.innerHTML = html;
 }
 
-export function renderToast(message: ToastMessage, action?: ToastAction): void {
+export function renderToast(message: ToastMessage | null, action?: ToastAction | null): void {
   let messageText = '';
 
   if (message != null) {

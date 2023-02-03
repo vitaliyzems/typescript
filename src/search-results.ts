@@ -51,7 +51,9 @@ export function renderSearchResultsBlock(variants: Hotel[]): void {
     `
   );
 
-  const searchResultBlock: HTMLElement = document.getElementById('search-results-block');
+  const searchResultBlock: HTMLElement | null = document.getElementById('search-results-block');
+
+  if (!searchResultBlock) return;
 
   searchResultBlock.addEventListener('click', (event: MouseEvent) => {
     const element = event.target as HTMLElement;
@@ -59,6 +61,9 @@ export function renderSearchResultsBlock(variants: Hotel[]): void {
       return;
     }
     const { id, name, image } = element.dataset;
+    if (!id || !name || !image) {
+      return;
+    };
     const item = { id, name, image };
     toggleFavoriteItem(item);
   });
@@ -92,7 +97,7 @@ function getSearchResult(hotel: Hotel): string {
 }
 
 function isActive(id: string): string {
-  const favoriteItems: FavoriteItems = JSON.parse(localStorage.getItem('favoriteItems'));
+  const favoriteItems: FavoriteItems = JSON.parse(localStorage.getItem('favoriteItems') ?? '{}');
 
   if (favoriteItems == null) return '';
 

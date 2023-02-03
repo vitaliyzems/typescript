@@ -10,13 +10,13 @@ checkOutDate.setDate(checkInDate.getDate() + 2);
 
 function formHandle(event: Event): void {
   event.preventDefault();
-  const checkInDateInput: HTMLInputElement = document.querySelector('#check-in-date');
-  const checkOutDateInput: HTMLInputElement = document.querySelector('#check-out-date');
-  const maxPriceInput: HTMLInputElement = document.querySelector('#max-price');
+  const checkInDateInput: HTMLInputElement | null = document.querySelector('#check-in-date');
+  const checkOutDateInput: HTMLInputElement | null = document.querySelector('#check-out-date');
+  const maxPriceInput: HTMLInputElement | null = document.querySelector('#max-price');
   const searchData = {
-    checkInDate: checkInDateInput.value,
-    checkOutDate: checkOutDateInput.value,
-    maxPrice: Number(maxPriceInput.value)
+    checkInDate: checkInDateInput ? checkInDateInput.value : '',
+    checkOutDate: checkOutDateInput ? checkOutDateInput.value : '',
+    maxPrice: Number(maxPriceInput ? maxPriceInput.value : 0)
   };
 
   getVariants(searchData).then((hotels: Hotel[]) => renderSearchResultsBlock(hotels));
@@ -62,16 +62,19 @@ export function renderSearchFormBlock(): void {
     </form>
     `
   );
-  const searchForm: HTMLFormElement = document.querySelector('form');
+  const searchForm: HTMLFormElement | null = document.querySelector('form');
+  if (!searchForm) {
+    return;
+  }
   searchForm.addEventListener('submit', formHandle);
 }
 
 async function getVariants(data: SearchFormData) {
-  const variants = [];
+  const variants: Hotel[] = [];
   const result = await search(data);
   result.forEach(hotel => variants.push(hotel));
 
-  const sdkHotels: HotelSdk[] = JSON.parse(localStorage.getItem('flat-rent-db'));
+  const sdkHotels: HotelSdk[] = JSON.parse(localStorage.getItem('flat-rent-db') ?? '[]');
 
   sdkHotels.forEach(hotel => {
     const { id, title, details, photos, price } = hotel;
